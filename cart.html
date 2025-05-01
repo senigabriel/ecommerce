@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MyShop - Cart</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f2f2f2;
+    }
+
+    header {
+      background-color: #232f3e;
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      margin: 0;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      margin-bottom: 20px;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f5f5f5;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    button {
+      padding: 10px 15px;
+      border: none;
+      background-color: #ff9900;
+      color: white;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #e68a00;
+    }
+
+    .total {
+      font-size: 18px;
+      font-weight: bold;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>MyShop - Your Cart</h1>
+  <a href="index.html" style="color: white; text-decoration: none;">← Continue Shopping</a>
+</header>
+
+<div class="container">
+  <table id="cart-table">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Price</th>
+        <th>Qty</th>
+        <th>Total</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <p class="total" id="grand-total">Total: $0.00</p>
+
+  <div class="actions">
+    <button onclick="clearCart()">Clear Cart</button>
+    <button onclick="checkout()">Proceed to Checkout</button>
+  </div>
+</div>
+
+<script>
+  function loadCart() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const tbody = document.querySelector("#cart-table tbody");
+    const totalDisplay = document.getElementById("grand-total");
+    tbody.innerHTML = '';
+    let grandTotal = 0;
+
+    cart.forEach((item, index) => {
+      const row = document.createElement("tr");
+      const itemTotal = item.price * item.quantity;
+      grandTotal += itemTotal;
+
+      row.innerHTML = `
+        <td>${item.name}</td>
+        <td>$${item.price.toFixed(2)}</td>
+        <td>${item.quantity}</td>
+        <td>$${itemTotal.toFixed(2)}</td>
+        <td><button onclick="removeItem(${index})">Remove</button></td>
+      `;
+      tbody.appendChild(row);
+    });
+
+    totalDisplay.textContent = `Total: $${grandTotal.toFixed(2)}`;
+  }
+
+  function removeItem(index) {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart.splice(index, 1);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    loadCart();
+  }
+
+  function clearCart() {
+    if (confirm("Clear all items from cart?")) {
+      localStorage.removeItem('cart');
+      loadCart();
+    }
+  }
+
+  function checkout() {
+    alert("Checkout logic will be added next (including email confirmation).");
+    // You can redirect to a PHP checkout page here
+    // window.location.href = "checkout.php";
+  }
+
+  window.onload = loadCart;
+</script>
+
+</body>
+</html>
