@@ -8,8 +8,8 @@
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
+      font-family: 'Courier New', sans-serif;
+      background-color: #2e2e2e;
       display: flex;
       justify-content: center;
       align-items: center;
