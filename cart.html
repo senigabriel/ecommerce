@@ -2,150 +2,105 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>MyShop - Cart</title>
+  <title>Your Cart - MyShop</title>
   <style>
     body {
       font-family: Arial, sans-serif;
+      background: #f4f4f4;
       margin: 0;
-      background-color: #f2f2f2;
-    }
-
-    header {
-      background-color: #232f3e;
-      color: white;
-      padding: 15px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    header h1 {
-      margin: 0;
-    }
-
-    .container {
       padding: 20px;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background-color: white;
-      margin-bottom: 20px;
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
-    th, td {
-      padding: 12px;
+    h2 {
+      text-align: center;
+    }
+
+    .cart-item {
+      padding: 10px;
       border-bottom: 1px solid #ddd;
-      text-align: left;
-    }
-
-    th {
-      background-color: #f5f5f5;
-    }
-
-    .actions {
-      display: flex;
-      justify-content: space-between;
-    }
-
-    button {
-      padding: 10px 15px;
-      border: none;
-      background-color: #ff9900;
-      color: white;
-      font-weight: bold;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #e68a00;
     }
 
     .total {
-      font-size: 18px;
       font-weight: bold;
+      margin-top: 20px;
+      text-align: right;
+    }
+
+    .btn {
+      background-color: #ff9900;
+      color: white;
+      padding: 10px 15px;
+      text-decoration: none;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    .btn:hover {
+      background-color: #e68a00;
+    }
+
+    .btn-secondary {
+      background-color: #ccc;
+      color: black;
+      margin-right: 10px;
+    }
+
+    .button-group {
       text-align: right;
     }
   </style>
 </head>
 <body>
 
-<header>
-  <h1>MyShop - Your Cart</h1>
-  <a href="index.html" style="color: white; text-decoration: none;">← Continue Shopping</a>
-</header>
-
 <div class="container">
-  <table id="cart-table">
-    <thead>
-      <tr>
-        <th>Item</th>
-        <th>Price</th>
-        <th>Qty</th>
-        <th>Total</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-
-  <p class="total" id="grand-total">Total: $0.00</p>
-
-  <div class="actions">
-    <button onclick="clearCart()">Clear Cart</button>
-    <button onclick="checkout()">Proceed to Checkout</button>
+  <h2>Your Shopping Cart</h2>
+  <div id="cart-items"></div>
+  <div class="total" id="total"></div>
+  <div class="button-group">
+    <button class="btn btn-secondary" onclick="clearCart()">Clear Cart</button>
+    <a href="index.html" class="btn">Back to Shop</a>
   </div>
 </div>
 
 <script>
-  function loadCart() {
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const tbody = document.querySelector("#cart-table tbody");
-    const totalDisplay = document.getElementById("grand-total");
-    tbody.innerHTML = '';
-    let grandTotal = 0;
+window.onload = function () {
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const cartContainer = document.getElementById('cart-items');
+  const totalDiv = document.getElementById('total');
+  let total = 0;
 
-    cart.forEach((item, index) => {
-      const row = document.createElement("tr");
-      const itemTotal = item.price * item.quantity;
-      grandTotal += itemTotal;
-
-      row.innerHTML = `
-        <td>${item.name}</td>
-        <td>$${item.price.toFixed(2)}</td>
-        <td>${item.quantity}</td>
-        <td>$${itemTotal.toFixed(2)}</td>
-        <td><button onclick="removeItem(${index})">Remove</button></td>
-      `;
-      tbody.appendChild(row);
-    });
-
-    totalDisplay.textContent = `Total: $${grandTotal.toFixed(2)}`;
+  if (cart.length === 0) {
+    cartContainer.innerHTML = "<p>Your cart is empty.</p>";
+    totalDiv.textContent = "";
+    return;
   }
 
-  function removeItem(index) {
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    cart.splice(index, 1);
-    localStorage.setItem('cart', JSON.stringify(cart));
-    loadCart();
-  }
+  cart.forEach((item, index) => {
+    const div = document.createElement('div');
+    div.className = 'cart-item';
+    div.innerHTML = `${item.name} - $${item.price.toFixed(2)}`;
+    cartContainer.appendChild(div);
+    total += item.price;
+  });
 
-  function clearCart() {
-    if (confirm("Clear all items from cart?")) {
-      localStorage.removeItem('cart');
-      loadCart();
-    }
-  }
+  totalDiv.textContent = `Total: $${total.toFixed(2)}`;
+};
 
-  function checkout() {
-    alert("Checkout logic will be added next (including email confirmation).");
-    // You can redirect to a PHP checkout page here
-    // window.location.href = "checkout.php";
-  }
-
-  window.onload = loadCart;
+function clearCart() {
+  localStorage.removeItem('cart');
+  location.reload();
+}
 </script>
 
 </body>
