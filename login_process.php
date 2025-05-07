@@ -19,19 +19,15 @@ $stmt->bind_param("s", $email);
 $stmt->execute();
 $stmt->store_result();
 
-if ($stmt->num_rows === 1) {
-    $stmt->bind_result($hashed_password);
-    $stmt->fetch();
-
-    if (password_verify($entered_password, $hashed_password)) {
-        echo "Login successful!";
+if ($row = $result->fetch_assoc()) {
+    if (password_verify($password, $row['password'])) {
+        $_SESSION['user_id'] = $row['id'];
+        header("Location: index.html");
+        exit();
     } else {
         echo "Invalid password.";
     }
 } else {
-    echo "No user found.";
+    echo "User not found.";
 }
-
-$stmt->close();
-$conn->close();
 ?>
