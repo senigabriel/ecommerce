@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - MyShop</title>
+  <title>Login - GTown Vintage</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     body {
@@ -39,7 +39,7 @@
     }
 
     .login-container button {
-      background-color: #ff9900;
+      background-color: #000;
       border: none;
       padding: 10px;
       width: 100%;
@@ -73,7 +73,7 @@
 <body>
 
 <div class="login-container">
-  <h2>Login to MyShop</h2>
+  <h2>Login to GTown Vintage</h2>
   <form action="login_process.php" method="POST">
     <input type="email" name="email" placeholder="Email" required>
     <input type="password" name="password" placeholder="Password" required>
